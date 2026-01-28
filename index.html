@@ -110,14 +110,26 @@
       box-shadow: 0 10px 24px rgba(0,0,0,0.35);
       transition: transform 0.15s ease, filter 0.15s ease;
       text-decoration: none;
+      margin-top: 6px;
     }
-
     .btn:hover {
       transform: translateY(-1px);
       filter: brightness(1.05);
     }
     .btn:active {
       transform: translateY(0px);
+    }
+
+    .link-btn {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 14px;
+      color: #60a5fa;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .link-btn:hover {
+      opacity: 0.8;
     }
 
     .hint {
@@ -129,18 +141,24 @@
 
     .tiny-link {
       margin-top: 14px;
-      font-size: 10px;
+      font-size: 8px;
       opacity: 0.18;
       line-height: 1.2;
       user-select: none;
     }
+
     .tiny-link a {
       color: #e2e8f0;
       text-decoration: none;
-      border-bottom: 1px dotted rgba(226,232,240,0.25);
     }
-    .tiny-link a:hover {
-      opacity: 0.55;
+
+    .fake-link {
+      color: #e2e8f0;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    .fake-link:hover {
+
     }
 
     .footer {
@@ -149,14 +167,31 @@
       opacity: 0.6;
     }
     .footer a{
-  color: inherit;
-  text-decoration: none;
-  opacity: 0.6;
-}
-.footer a:hover{
-  opacity: 0.9;
-  text-decoration: underline;
-}
+      color: inherit;
+      text-decoration: none;
+      opacity: 0.6;
+    }
+    .footer a:hover{
+      opacity: 0.9;
+      text-decoration: underline;
+    }
+
+    /* блок поля ввода */
+    #codeInputWrapper {
+      margin-top:12px; 
+      display:none;
+    }
+    #codeInputWrapper input {
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.3);
+      width:60%;
+      max-width:200px;
+    }
+    #codeInputWrapper .btn {
+      background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+      margin-left:6px;
+    }
   </style>
 </head>
 
@@ -164,51 +199,83 @@
   <div class="card">
     <div class="brand">Word<span>Express</span></div>
 
-    <button class="flip-btn" id="flipBtn" type="button" title="Перевернуть">
-      ⟲
-    </button>
+    <button class="flip-btn" id="flipBtn" type="button" title="Перевернуть">⟲</button>
 
     <div class="img-wrap">
       <img
         id="saladImg"
         src="https://pink-implicit-jaguar-613.mypinata.cloud/ipfs/bafybeibp3lbegs74cjtknwwf6bbzqtuxukvzuty64jxcez3izfucsh4yzy"
-        alt="13raz"
+        alt="13raz" title="zhelaem tebe rabotu horoshuy alt"
       />
     </div>
 
     <h1>Активировать купон</h1>
 
-    <button class="btn" id="activateBtn" type="button">
-      Да
-    </button>
-
-    <div class="hint">
-      Активировать до 25.01.2027<br>
+    <button class="btn" id="activateBtn">Да</button>
+    <div>
+      <span id="haveCodeBtn" class="link-btn">У меня есть код</span>
     </div>
 
+    <!-- поле ввода кода, изначально скрыто -->
+    <div id="codeInputWrapper">
+      <input type="text" id="codeInput" placeholder="Введите код"/>
+      <button class="btn" id="submitCodeBtn">Отправить</button>
+    </div>
+
+    <div class="hint">Активировать до 25.01.2027</div>
+
     <div class="tiny-link">
-      Условия использования сервиса
-      <a href="https://pastebin.com/mL7WX3GH" target="_blank" rel="noopener noreferrer">
-        можно
-      </a> прочитать здесь
+      <span class="fake-link" role="link" tabindex="0">Условия</span>
+      <a href="https://pastebin.com/mL7WX3GH" target="_blank" rel="noopener noreferrer">использования</a>
+      <span class="fake-link" role="link" tabindex="0">сервиса</span>
     </div>
 
     <div class="footer">
-  <a href="https://promocodes.hi-tech.mail.ru/blog/ozon-kak-aktivirovat-promokod" target="_blank" rel="noopener noreferrer">Ozon.ru</a>
-</div>
+      <a href="https://promocodes.hi-tech.mail.ru/blog/ozon-kak-aktivirovat-promokod" target="_blank" rel="noopener noreferrer">Ozon.ru</a>
+    </div>
   </div>
 
   <script>
     const img = document.getElementById("saladImg");
 
+    // кнопка "Да"
     document.getElementById("activateBtn").addEventListener("click", () => {
-      alert("Ну ну, щас прям, работу тебе хорошую");
+      const sure = confirm("Вы уверены?");
+      if (sure) {
+        alert("Ну не хочешь как хочешь");
+      } else {
+        alert("Ознакомьтесь с условиями");
+      }
     });
 
+    // кнопка "Перевернуть"
     document.getElementById("flipBtn").addEventListener("click", () => {
       img.classList.toggle("flipped");
+    });
+
+    // фейковые ссылки
+    document.querySelectorAll(".fake-link").forEach(el => {
+      el.addEventListener("click", (e) => e.preventDefault());
+      el.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") e.preventDefault();
+      });
+    });
+
+    // кнопка "У меня есть код"
+    const haveCodeBtn = document.getElementById("haveCodeBtn");
+    const codeInputWrapper = document.getElementById("codeInputWrapper");
+    const submitCodeBtn = document.getElementById("submitCodeBtn");
+    const codeInput = document.getElementById("codeInput");
+
+    haveCodeBtn.addEventListener("click", () => {
+      codeInputWrapper.style.display = "block";
+      codeInput.focus();
+    });
+
+    submitCodeBtn.addEventListener("click", () => {
+      alert("Не совпадает. Может в другой раз получится. Работу тебе хорошую.");
+      codeInput.value = "FUWNBbXUhE";
     });
   </script>
 </body>
 </html>
-   
