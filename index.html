@@ -16,6 +16,7 @@
     }
 
     .card {
+      position: relative;
       padding: 28px;
       border-radius: 20px;
       background: rgba(255,255,255,0.06);
@@ -38,18 +39,56 @@
       font-weight: 800;
     }
 
-    img {
+    /* мини-иконка переворота */
+    .flip-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: rgba(226,232,240,0.85);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+      transition: transform 0.15s ease, filter 0.15s ease, background 0.15s ease;
+    }
+    .flip-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+      background: rgba(255,255,255,0.09);
+    }
+    .flip-btn:active {
+      transform: translateY(0px);
+    }
+
+    .img-wrap {
       width: 440px;
       max-width: 92vw;
-      height: auto;
-      border-radius: 16px;
-      display: block;
       margin: 0 auto 16px;
+      border-radius: 16px;
+      overflow: hidden;
       box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }
 
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transform: rotate(0deg);
+      transition: transform 0.45s ease;
+    }
+
+    img.flipped {
+      transform: rotate(180deg);
+    }
+
     h1 {
-      margin: 6px 0 14px;
+      margin: 6px 0 12px;
       font-size: 18px;
       font-weight: 700;
       opacity: 0.95;
@@ -86,6 +125,7 @@
       margin-top: 12px;
       font-size: 12px;
       opacity: 0.65;
+      line-height: 1.35;
     }
 
     .tiny-link {
@@ -116,19 +156,28 @@
   <div class="card">
     <div class="brand">Word<span>Express</span></div>
 
-    <img
-      src="https://pink-implicit-jaguar-613.mypinata.cloud/ipfs/bafybeibp3lbegs74cjtknwwf6bbzqtuxukvzuty64jxcez3izfucsh4yzy"
-      alt="13"
-    />
+    <!-- Иконка переворота -->
+    <button class="flip-btn" id="flipBtn" type="button" title="Перевернуть">
+      ⟲
+    </button>
+
+    <div class="img-wrap">
+      <img
+        id="saladImg"
+        src="https://pink-implicit-jaguar-613.mypinata.cloud/ipfs/bafybeibp3lbegs74cjtknwwf6bbzqtuxukvzuty64jxcez3izfucsh4yzy"
+        alt="13"
+      />
+    </div>
 
     <h1>Активировать купон</h1>
 
-    <!-- Кнопка -->
     <button class="btn" id="activateBtn" type="button">
       Да
     </button>
 
-    <div class="hint">Активировать до 25.01.2027</div>
+    <div class="hint">
+      Активировать до 25.01.2027<br>
+    </div>
 
     <div class="tiny-link">
       Условия использования
@@ -141,8 +190,14 @@
   </div>
 
   <script>
+    const img = document.getElementById("saladImg");
+
     document.getElementById("activateBtn").addEventListener("click", () => {
       alert("Ну ну, работу хорошую тебе");
+    });
+
+    document.getElementById("flipBtn").addEventListener("click", () => {
+      img.classList.toggle("flipped");
     });
   </script>
 </body>
