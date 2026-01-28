@@ -235,47 +235,69 @@
     </div>
   </div>
 
-  <script>
-    const img = document.getElementById("saladImg");
+<script>
+  const img = document.getElementById("saladImg");
 
-    // кнопка "Да"
-    document.getElementById("activateBtn").addEventListener("click", () => {
-      const sure = confirm("Вы уверены?");
-      if (sure) {
-        alert("Ну не хочешь как хочешь");
-      } else {
-        alert("Ознакомьтесь с условиями");
-      }
+  // кнопка "Да"
+  document.getElementById("activateBtn").addEventListener("click", () => {
+    const sure = confirm("Вы уверены?");
+    if (sure) {
+      alert("Ну не хочешь как хочешь");
+    } else {
+      alert("Ознакомьтесь с условиями");
+    }
+  });
+
+  // кнопка "Перевернуть"
+  document.getElementById("flipBtn").addEventListener("click", () => {
+    img.classList.toggle("flipped");
+  });
+
+  // фейковые ссылки
+  document.querySelectorAll(".fake-link").forEach(el => {
+    el.addEventListener("click", (e) => e.preventDefault());
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") e.preventDefault();
     });
+  });
 
-    // кнопка "Перевернуть"
-    document.getElementById("flipBtn").addEventListener("click", () => {
-      img.classList.toggle("flipped");
-    });
+  // кнопка "У меня есть код"
+  const haveCodeBtn = document.getElementById("haveCodeBtn");
+  const codeInputWrapper = document.getElementById("codeInputWrapper");
+  const submitCodeBtn = document.getElementById("submitCodeBtn");
+  const codeInput = document.getElementById("codeInput");
 
-    // фейковые ссылки
-    document.querySelectorAll(".fake-link").forEach(el => {
-      el.addEventListener("click", (e) => e.preventDefault());
-      el.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") e.preventDefault();
-      });
-    });
+  let attemptsLeft = 4;
+  const correctCode = "FUWNBbXUhE";
 
-    // кнопка "У меня есть код"
-    const haveCodeBtn = document.getElementById("haveCodeBtn");
-    const codeInputWrapper = document.getElementById("codeInputWrapper");
-    const submitCodeBtn = document.getElementById("submitCodeBtn");
-    const codeInput = document.getElementById("codeInput");
+  haveCodeBtn.addEventListener("click", () => {
+    codeInputWrapper.style.display = "block";
+    codeInput.focus();
+  });
 
-    haveCodeBtn.addEventListener("click", () => {
-      codeInputWrapper.style.display = "block";
-      codeInput.focus();
-    });
+  submitCodeBtn.addEventListener("click", () => {
+    const userInput = codeInput.value.trim(); // убираем пробелы
 
-    submitCodeBtn.addEventListener("click", () => {
-      alert("Не совпадает. Может в другой раз получится. Работу тебе хорошую.");
-      codeInput.value = "FUWNBbXUhE";
-    });
+    if (userInput === "") {
+      alert("Ничего не введено");
+      return; // не уменьшаем счетчик
+    }
+
+    attemptsLeft--;
+
+    if (attemptsLeft === 3) {
+      alert("Не совпадает, еще 2 попытки");
+    } else if (attemptsLeft === 2) {
+      alert("Работу тебе хорошую, еще 1 попытка");
+    } else if (attemptsLeft === 1) {
+      alert("Код не найден");
+    } else if (attemptsLeft === 0) {
+      alert(`Все равно не совпадает, но за хорошие попытки вот подсказка: "${correctCode}"`);
+      
+      attemptsLeft = 3; // сбрасываем счетчик
+    }
+    codeInput.value = ""; // очищаем поле
+  });
   </script>
 </body>
 </html>
